@@ -1,26 +1,27 @@
 import queue
 
+# CURRENTLY ONLY RETURNS THE FIRST SOLUTION FOUND
+
 # Problem: You are working a children's toy drive and are tasked with obtaining enough 
 # batteries to power the pile of toys in front of you. Batteries in your town are sold
 # in packs of 6, 9, and 20. Write an algorithm that will allow you to determine all possible
 # combinations of battery packs that will give you exactly N batteries.
 
 class CSP():
-    def __init__(self, variables, constraints, N):
+    def __init__(self, variables, constraints):
         self.variables = variables
         self.constraints = constraints
-        self.N = N
         self.domains = {}
         for var in variables:
-            self.domains[var] = [i for i in range((N//var)+1)]
+            self.domains[var] = [i for i in range((constraints//var)+1)]
 
 # \param N the total batteries
 def getPacks(packTypes, N):
     packTypes.sort(reverse=True)
-    root = CSP(packTypes, None, N)
+    root = CSP(packTypes, N)
     print(root.domains)
     result = backtracking_search(root)
-    print(result)
+    #print(result)
 
 # Runs backtracking search over the csp
 # \param csp the csp object containing the problem
@@ -51,7 +52,7 @@ def is_consistent(variable, assignment, csp):
     sum = 0
     for i, var in enumerate(assignment):
         sum += assignment[var]*csp.variables[i]
-    if sum > csp.N or sum < csp.N:
+    if sum > csp.constraints or sum < csp.constraints:
         return -1
     return 1
 
